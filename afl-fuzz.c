@@ -65,6 +65,7 @@
 
 static u8 *in_dir,                    /* Input directory with test cases  */
           *out_file,                  /* File to fuzz, if any             */
+          *persist_file,              /* File to create (Persist all)     */
           *out_dir,                   /* Working & output directory       */
           *sync_dir,                  /* Synchronization directory        */
           *sync_id,                   /* Fuzzer ID                        */
@@ -135,6 +136,7 @@ static u32 queued_paths,              /* Total number of queued testcases */
            cur_depth,                 /* Current path depth               */
            max_depth,                 /* Max path depth                   */
            useless_at_start,          /* Number of useless starting paths */
+           persist_count = 0,         /* Counter for Sidd Files           */
            current_entry,             /* Current queue entry ID           */
            havoc_div = 1;             /* Cycle count divisor for havoc    */
 
@@ -2292,7 +2294,6 @@ static void write_to_testcase(void* mem, u32 len) {
 
   s32 fd = out_fd;
   s32 persist_fd;
-
 
   if (out_file) {
 
