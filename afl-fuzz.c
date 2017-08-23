@@ -158,6 +158,10 @@ static u64 total_crashes,             /* Total number of crashes          */
            blocks_eff_total,          /* Blocks subject to effector maps  */
            blocks_eff_select;         /* Blocks selected as fuzzable      */
 
+                                      /* SIDD START                       */
+static u64 total_bits_changed = 0;    /* Total number of bits changed     */
+                                      /* SIDD END                         */
+
 static u32 subseq_hangs;              /* Number of hangs in a row         */
 
 static u8 *stage_name = "init",       /* Name of the current fuzz stage   */
@@ -3199,6 +3203,7 @@ static void write_stats_file(double bitmap_cvg, double eps) {
              "last_crash     : %llu\n"
              "last_hang      : %llu\n"
              "exec_timeout   : %u\n"
+             "bits_changed   : %u\n"
              "afl_banner     : %s\n"
              "afl_version    : " VERSION "\n"
              "command_line   : %s\n",
@@ -3208,7 +3213,7 @@ static void write_stats_file(double bitmap_cvg, double eps) {
              max_depth, current_entry, pending_favored, pending_not_fuzzed,
              queued_variable, bitmap_cvg, unique_crashes, unique_hangs,
              last_path_time / 1000, last_crash_time / 1000,
-             last_hang_time / 1000, exec_tmout, use_banner, orig_cmdline);
+             last_hang_time / 1000, exec_tmout, total_bits_changed, use_banner, orig_cmdline);
              /* ignore errors */
 
   fclose(f);
@@ -4803,6 +4808,10 @@ static u8 fuzz_one(char** argv) {
 
     FLIP_BIT(out_buf, stage_cur);
 
+    // SIDD START => Add 1 to total_bits_changed
+    total_bits_changed += 1;
+    // SIDD END
+
     if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
 
     FLIP_BIT(out_buf, stage_cur);
@@ -4898,6 +4907,10 @@ static u8 fuzz_one(char** argv) {
     FLIP_BIT(out_buf, stage_cur);
     FLIP_BIT(out_buf, stage_cur + 1);
 
+    // SIDD START => Add 2 to total_bits_changed
+    total_bits_changed += 2;
+    // SIDD END
+
     if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
 
     FLIP_BIT(out_buf, stage_cur);
@@ -4926,6 +4939,10 @@ static u8 fuzz_one(char** argv) {
     FLIP_BIT(out_buf, stage_cur + 1);
     FLIP_BIT(out_buf, stage_cur + 2);
     FLIP_BIT(out_buf, stage_cur + 3);
+
+    // SIDD START => Add 4 to total_bits_changed
+    total_bits_changed += 4;
+    // SIDD END
 
     if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
 
@@ -4978,6 +4995,10 @@ static u8 fuzz_one(char** argv) {
     stage_cur_byte = stage_cur;
 
     out_buf[stage_cur] ^= 0xFF;
+
+    // SIDD START => Add 8 to total_bits_changed
+     total_bits_changed += 8;
+     // SIDD END
 
     if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
 
@@ -5057,6 +5078,10 @@ static u8 fuzz_one(char** argv) {
 
     *(u16*)(out_buf + i) ^= 0xFFFF;
 
+    // SIDD START => Add 16 to total_bits_changed
+     total_bits_changed += 16;
+     // SIDD END
+
     if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
     stage_cur++;
 
@@ -5093,6 +5118,10 @@ static u8 fuzz_one(char** argv) {
     stage_cur_byte = i;
 
     *(u32*)(out_buf + i) ^= 0xFFFFFFFF;
+
+    // SIDD START => Add 32 to total_bits_changed
+     total_bits_changed += 32;
+     // SIDD END
 
     if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
     stage_cur++;
@@ -5148,6 +5177,16 @@ skip_bitflip:
         stage_cur_val = j;
         out_buf[i] = orig + j;
 
+        // SIDD START => Count number of changed bits
+         u8 sidd_r = r;
+         u8 sidd_count = 0;
+         while (sidd_r) {
+           sidd_r &= (sidd_r - 1);
+           sidd_count++;
+         }
+         total_bits_changed += sidd_count;
+         // SIDD END
+
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
 
@@ -5159,6 +5198,16 @@ skip_bitflip:
 
         stage_cur_val = -j;
         out_buf[i] = orig - j;
+
+        // SIDD START => Count number of changed bits
+         u8 sidd_r = r;
+         u8 sidd_count = 0;
+         while (sidd_r) {
+           sidd_r &= (sidd_r - 1);
+           sidd_count++;
+         }
+         total_bits_changed += sidd_count;
+         // SIDD END
 
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
@@ -5219,6 +5268,16 @@ skip_bitflip:
         stage_cur_val = j;
         *(u16*)(out_buf + i) = orig + j;
 
+        // SIDD START => Count number of changed bits
+         u16 sidd_r = r1;
+         u16 sidd_count = 0;
+         while (sidd_r) {
+           sidd_r &= (sidd_r - 1);
+           sidd_count++;
+         }
+         total_bits_changed += sidd_count;
+         // SIDD END
+
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
  
@@ -5228,6 +5287,16 @@ skip_bitflip:
 
         stage_cur_val = -j;
         *(u16*)(out_buf + i) = orig - j;
+
+        // SIDD START => Count number of changed bits
+         u16 sidd_r = r2;
+         u16 sidd_count = 0;
+         while (sidd_r) {
+           sidd_r &= (sidd_r - 1);
+           sidd_count++;
+         }
+         total_bits_changed += sidd_count;
+         // SIDD END
 
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
@@ -5244,6 +5313,16 @@ skip_bitflip:
         stage_cur_val = j;
         *(u16*)(out_buf + i) = SWAP16(SWAP16(orig) + j);
 
+        // SIDD START => Count number of changed bits
+         u16 sidd_r = r3;
+         u16 sidd_count = 0;
+         while (sidd_r) {
+           sidd_r &= (sidd_r - 1);
+           sidd_count++;
+         }
+         total_bits_changed += sidd_count;
+         // SIDD END
+
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
 
@@ -5253,6 +5332,16 @@ skip_bitflip:
 
         stage_cur_val = -j;
         *(u16*)(out_buf + i) = SWAP16(SWAP16(orig) - j);
+
+        // SIDD START => Count number of changed bits
+         u16 sidd_r = r4;
+         u16 sidd_count = 0;
+         while (sidd_r) {
+           sidd_r &= (sidd_r - 1);
+           sidd_count++;
+         }
+         total_bits_changed += sidd_count;
+         // SIDD END
 
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
@@ -5312,6 +5401,16 @@ skip_bitflip:
         stage_cur_val = j;
         *(u32*)(out_buf + i) = orig + j;
 
+        // SIDD START => Count number of changed bits
+         u32 sidd_r = r1;
+         u32 sidd_count = 0;
+         while (sidd_r) {
+           sidd_r &= (sidd_r - 1);
+           sidd_count++;
+         }
+         total_bits_changed += sidd_count;
+         // SIDD END
+
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
 
@@ -5321,6 +5420,16 @@ skip_bitflip:
 
         stage_cur_val = -j;
         *(u32*)(out_buf + i) = orig - j;
+
+        // SIDD START => Count number of changed bits
+         u32 sidd_r = r2;
+         u32 sidd_count = 0;
+         while (sidd_r) {
+           sidd_r &= (sidd_r - 1);
+           sidd_count++;
+         }
+         total_bits_changed += sidd_count;
+         // SIDD END
 
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
@@ -5336,6 +5445,16 @@ skip_bitflip:
         stage_cur_val = j;
         *(u32*)(out_buf + i) = SWAP32(SWAP32(orig) + j);
 
+        // SIDD START => Count number of changed bits
+         u32 sidd_r = r3;
+         u32 sidd_count = 0;
+         while (sidd_r) {
+           sidd_r &= (sidd_r - 1);
+           sidd_count++;
+         }
+         total_bits_changed += sidd_count;
+         // SIDD END
+
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
 
@@ -5345,6 +5464,16 @@ skip_bitflip:
 
         stage_cur_val = -j;
         *(u32*)(out_buf + i) = SWAP32(SWAP32(orig) - j);
+
+        // SIDD START => Count number of changed bits
+         u32 sidd_r = r4;
+         u32 sidd_count = 0;
+         while (sidd_r) {
+           sidd_r &= (sidd_r - 1);
+           sidd_count++;
+         }
+         total_bits_changed += sidd_count;
+         // SIDD END
 
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
@@ -5405,6 +5534,10 @@ skip_arith:
       stage_cur_val = interesting_8[j];
       out_buf[i] = interesting_8[j];
 
+      // SIDD START => Assume 8 bits changed
+       total_bits_changed += 8;
+       // SIDD END
+
       if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
 
       out_buf[i] = orig;
@@ -5458,6 +5591,10 @@ skip_arith:
 
         *(u16*)(out_buf + i) = interesting_16[j];
 
+        // SIDD START => Assume 16 bits changed
+         total_bits_changed += 16;
+         // SIDD END
+
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
 
@@ -5471,6 +5608,11 @@ skip_arith:
         stage_val_type = STAGE_VAL_BE;
 
         *(u16*)(out_buf + i) = SWAP16(interesting_16[j]);
+
+        // SIDD START => Assume 16 bits changed
+         total_bits_changed += 16;
+         // SIDD END
+
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
 
@@ -5527,6 +5669,10 @@ skip_arith:
 
         *(u32*)(out_buf + i) = interesting_32[j];
 
+        // SIDD START => Assume 32 bits changed
+         total_bits_changed += 32;
+         // SIDD END
+
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
 
@@ -5540,6 +5686,11 @@ skip_arith:
         stage_val_type = STAGE_VAL_BE;
 
         *(u32*)(out_buf + i) = SWAP32(interesting_32[j]);
+
+        // SIDD START => Assume 32 bits changed
+         total_bits_changed += 32;
+         // SIDD END
+
         if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
         stage_cur++;
 
@@ -5606,6 +5757,10 @@ skip_interest:
       last_len = extras[j].len;
       memcpy(out_buf + i, extras[j].data, last_len);
 
+      // SIDD START => Add 8 * last_len to total_bits_changed
+       total_bits_changed += 8 * last_len;
+       // SIDD END
+
       if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
 
       stage_cur++;
@@ -5644,6 +5799,10 @@ skip_interest:
 
       /* Copy tail */
       memcpy(ex_tmp + i + extras[j].len, out_buf + i, len - i);
+
+      // SIDD START => Add 8 * extras[j].len
+       total_bits_changed += 8 * extras[j].len;
+       // SIDD END
 
       if (common_fuzz_stuff(argv, ex_tmp, len + extras[j].len)) {
         ck_free(ex_tmp);
@@ -5700,6 +5859,10 @@ skip_user_extras:
 
       last_len = a_extras[j].len;
       memcpy(out_buf + i, a_extras[j].data, last_len);
+
+      // SIDD START => Add 8 * last_len to total_bits_changed
+       total_bits_changed += 8 * last_len;
+       // SIDD END
 
       if (common_fuzz_stuff(argv, out_buf, len)) goto abandon_entry;
 
@@ -5781,6 +5944,10 @@ havoc_stage:
           /* Flip a single bit somewhere. Spooky! */
 
           FLIP_BIT(out_buf, UR(temp_len << 3));
+
+          // SIDD START => Add 1 for Bit flipped
+           total_bits_changed += 1;
+           // SIDD END
           break;
 
         case 1: 
@@ -5788,6 +5955,11 @@ havoc_stage:
           /* Set byte to interesting value. */
 
           out_buf[UR(temp_len)] = interesting_8[UR(sizeof(interesting_8))];
+
+          // SIDD START => Add 8 bits
+           total_bits_changed += 8;
+           // SIDD END
+
           break;
 
         case 2:
@@ -5807,6 +5979,10 @@ havoc_stage:
               interesting_16[UR(sizeof(interesting_16) >> 1)]);
 
           }
+
+          // SIDD START => Add 16 bits
+           total_bits_changed += 16;
+           // SIDD END
 
           break;
 
@@ -5828,6 +6004,10 @@ havoc_stage:
 
           }
 
+          // SIDD START => Add 32 bits
+           total_bits_changed += 32;
+           // SIDD END
+
           break;
 
         case 4:
@@ -5835,6 +6015,11 @@ havoc_stage:
           /* Randomly subtract from byte. */
 
           out_buf[UR(temp_len)] -= 1 + UR(ARITH_MAX);
+
+          // SIDD START => Add 8 + 3 bits
+           total_bits_changed += 11;
+           // SIDD END
+
           break;
 
         case 5:
@@ -5842,6 +6027,11 @@ havoc_stage:
           /* Randomly add to byte. */
 
           out_buf[UR(temp_len)] += 1 + UR(ARITH_MAX);
+
+          // SIDD START => Add 8 + 3 bits
+           total_bits_changed += 11;
+           // SIDD END
+
           break;
 
         case 6:
@@ -5865,6 +6055,10 @@ havoc_stage:
               SWAP16(SWAP16(*(u16*)(out_buf + pos)) - num);
 
           }
+
+          // SIDD START => Add 16 + 5 bits
+           total_bits_changed += 21;
+           // SIDD END
 
           break;
 
@@ -5890,6 +6084,10 @@ havoc_stage:
 
           }
 
+          // SIDD START => Add 16 + 5 bits
+           total_bits_changed += 21;
+           // SIDD END
+
           break;
 
         case 8:
@@ -5913,6 +6111,10 @@ havoc_stage:
               SWAP32(SWAP32(*(u32*)(out_buf + pos)) - num);
 
           }
+
+          // SIDD START => Add 32 + 9 bits
+           total_bits_changed += 41;
+           // SIDD END
 
           break;
 
@@ -5938,6 +6140,10 @@ havoc_stage:
 
           }
 
+          // SIDD START => Add 32 + 9 bits
+           total_bits_changed += 41;
+           // SIDD END
+
           break;
 
         case 10:
@@ -5947,6 +6153,11 @@ havoc_stage:
              possibility of a no-op. */
 
           out_buf[UR(temp_len)] ^= 1 + UR(255);
+
+          // SIDD START => Add 8 bits
+           total_bits_changed += 8;
+           // SIDD END
+
           break;
 
         case 11 ... 12: {
@@ -5969,6 +6180,10 @@ havoc_stage:
                     temp_len - del_from - del_len);
 
             temp_len -= del_len;
+
+            // SIDD START => Add 8 * del_len bits
+             total_bits_changed += 8 * del_len;
+             // SIDD END
 
             break;
 
@@ -6009,6 +6224,10 @@ havoc_stage:
             out_buf = new_buf;
             temp_len += clone_len;
 
+            // SIDD START => Add 8 * clone_len bits
+             total_bits_changed += 8 * clone_len;
+             // SIDD END
+
           }
 
           break;
@@ -6033,6 +6252,10 @@ havoc_stage:
                 memmove(out_buf + copy_to, out_buf + copy_from, copy_len);
 
             } else memset(out_buf + copy_to, UR(256), copy_len);
+
+            // SIDD START => Add copy_len bits
+             total_bits_changed += 8 * copy_len;
+             // SIDD END
 
             break;
 
@@ -6059,6 +6282,10 @@ havoc_stage:
               insert_at = UR(temp_len - extra_len + 1);
               memcpy(out_buf + insert_at, a_extras[use_extra].data, extra_len);
 
+              // SIDD START => Add 8 * extra_len
+               total_bits_changed += 8 * extra_len;
+               // SIDD END
+
             } else {
 
               /* No auto extras or odds in our favor. Use the dictionary. */
@@ -6071,6 +6298,10 @@ havoc_stage:
 
               insert_at = UR(temp_len - extra_len + 1);
               memcpy(out_buf + insert_at, extras[use_extra].data, extra_len);
+
+              // SIDD START => Add 8 * extra_len
+               total_bits_changed += 8 * extra_len;
+               // SIDD END
 
             }
 
@@ -6101,6 +6332,10 @@ havoc_stage:
               /* Inserted part */
               memcpy(new_buf + insert_at, a_extras[use_extra].data, extra_len);
 
+              // SIDD START => Add 8 * extra_len
+               total_bits_changed += 8 * extra_len;
+               // SIDD END
+
             } else {
 
               use_extra = UR(extras_cnt);
@@ -6115,6 +6350,10 @@ havoc_stage:
 
               /* Inserted part */
               memcpy(new_buf + insert_at, extras[use_extra].data, extra_len);
+
+              // SIDD START => Add 8 * extra_len
+               total_bits_changed += 8 * extra_len;
+               // SIDD END
 
             }
 
