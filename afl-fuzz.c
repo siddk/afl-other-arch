@@ -7599,7 +7599,7 @@ int main(int argc, char** argv) {
         fprintf(optarg);
         if (sscanf(optarg, "%d", &havoc_n_mode) < 1)
             FATAL("Bad syntax used for -a");
-        break;
+      break;
       // SIDD END
 
       case 'i':
