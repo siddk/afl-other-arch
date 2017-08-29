@@ -5977,9 +5977,9 @@ havoc_stage:
  
     for (i = 0; i < use_stacking; i++) {
 
-      switch (UR(15 + ((extras_cnt + a_extras_cnt) ? 2 : 0))) {
+      switch (UR(92 + ((extras_cnt + a_extras_cnt) ? 2 : 0))) {
 
-        case 0:
+        case 0 ... 50:
 
           /* Flip a single bit somewhere. Spooky! */
 
@@ -5990,7 +5990,7 @@ havoc_stage:
            // SIDD END
           break;
 
-        case 1: 
+        case 51 ... 53:
 
           /* Set byte to interesting value. */
 
@@ -6002,7 +6002,7 @@ havoc_stage:
 
           break;
 
-        case 2:
+        case 54 ... 56:
 
           /* Set word to interesting value, randomly choosing endian. */
 
@@ -6026,7 +6026,7 @@ havoc_stage:
 
           break;
 
-        case 3:
+        case 57 ... 59:
 
           /* Set dword to interesting value, randomly choosing endian. */
 
@@ -6050,7 +6050,7 @@ havoc_stage:
 
           break;
 
-        case 4:
+        case 60 ... 62:
 
           /* Randomly subtract from byte. */
 
@@ -6062,7 +6062,7 @@ havoc_stage:
 
           break;
 
-        case 5:
+        case 63 ... 65:
 
           /* Randomly add to byte. */
 
@@ -6074,7 +6074,7 @@ havoc_stage:
 
           break;
 
-        case 6:
+        case 66 ... 68:
 
           /* Randomly subtract from word, random endian. */
 
@@ -6102,7 +6102,7 @@ havoc_stage:
 
           break;
 
-        case 7:
+        case 69 ... 71:
 
           /* Randomly add to word, random endian. */
 
@@ -6130,7 +6130,7 @@ havoc_stage:
 
           break;
 
-        case 8:
+        case 72 .. 74:
 
           /* Randomly subtract from dword, random endian. */
 
@@ -6158,7 +6158,7 @@ havoc_stage:
 
           break;
 
-        case 9:
+        case 75 ... 77:
 
           /* Randomly add to dword, random endian. */
 
@@ -6186,7 +6186,7 @@ havoc_stage:
 
           break;
 
-        case 10:
+        case 78 ... 80:
 
           /* Just set a random byte to a random value. Because,
              why not. We use XOR with 1-255 to eliminate the
@@ -6200,7 +6200,7 @@ havoc_stage:
 
           break;
 
-        case 11 ... 12: {
+        case 81 ... 86: {
 
             /* Delete bytes. We're making this a bit more likely
                than insertion (the next option) in hopes of keeping
@@ -6229,7 +6229,7 @@ havoc_stage:
 
           }
 
-        case 13:
+        case 87 ... 89:
 
           if (temp_len + HAVOC_BLK_LARGE < MAX_FILE) {
 
@@ -6272,7 +6272,7 @@ havoc_stage:
 
           break;
 
-        case 14: {
+        case 90 ... 92: {
 
             /* Overwrite bytes with a randomly selected chunk (75%) or fixed
                bytes (25%). */
@@ -6304,7 +6304,7 @@ havoc_stage:
         /* Values 16 and 17 can be selected only if there are any extras
            present in the dictionaries. */
 
-        case 16: {
+        case 93: {
 
             /* Overwrite bytes with an extra. */
 
@@ -6349,7 +6349,7 @@ havoc_stage:
 
           }
 
-        case 17: {
+        case 94: {
 
             u32 use_extra, extra_len, insert_at = UR(temp_len);
             u8* new_buf;
