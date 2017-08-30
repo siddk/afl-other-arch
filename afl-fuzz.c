@@ -6130,7 +6130,7 @@ havoc_stage:
 
           break;
 
-        case 72 .. 74:
+        case 72 ... 74:
 
           /* Randomly subtract from dword, random endian. */
 
