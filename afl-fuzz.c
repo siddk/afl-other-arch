@@ -6050,7 +6050,7 @@ havoc_stage:
 
           break;
 
-        case 0 ... 50:
+        case 63 ... 65:
 
           /* Randomly subtract from byte. */
 
@@ -6062,7 +6062,7 @@ havoc_stage:
 
           break;
 
-        case 63 ... 65:
+        case 0 ... 50:
 
           /* Randomly add to byte. */
 
