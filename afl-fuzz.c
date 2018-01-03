@@ -7655,6 +7655,8 @@ int main(int argc, char** argv) {
             FATAL("Distribution does not sum to 1(000)!\n");
         }
 
+        SAYF("Made it to end of 'P'!\n");
+
         break;
       // SIDD END
 
