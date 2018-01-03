@@ -7631,7 +7631,7 @@ int main(int argc, char** argv) {
         // Parse Havoc Prob Dist into prob_dist_arr
         char *p_vals;
         p_vals = strtok(havoc_prob_dist, "J");
-        u8 counter = 0;
+        int counter = 0;
         while (p_vals != NULL) {
             prob_dist_arr[counter] = atoi(p_vals);
             p_vals = strtok(NULL, "J");
@@ -7644,9 +7644,10 @@ int main(int argc, char** argv) {
             SAYF("Not enough values to unpack in prob dist!\n");
             FATAL("Not enough values to unpack in prob dist!\n");
         }
+        SAYF("Just handled errors!\n");
 
         // Assert Sums to 1000
-        u8 sidd_sum = 0;
+        int sidd_sum = 0;
         while (counter > -1) {
             counter -= 1;
             sidd_sum += prob_dist_arr[counter];
