@@ -358,7 +358,6 @@ static inline u32 SAMPLE_FROM_DIST() {
             return i;
         }
     }
-    SAYF("Sampled from DIST!\n");
     return i;
 }
 
