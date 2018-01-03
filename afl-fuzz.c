@@ -7636,6 +7636,7 @@ int main(int argc, char** argv) {
             prob_dist_arr[counter] = atoi(p_vals);
             p_vals = strtok(NULL, "J");
             counter += 1;
+            SAYF("Hello I'm looping!\n");
         }
 
         // Error Handling
