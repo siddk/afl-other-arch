@@ -4364,8 +4364,14 @@ static u8 common_fuzz_stuff(char** argv, u8* out_buf, u32 len) {
   }
 
   /* This handles FAULT_ERROR for us: */
+  u8 sidd_keep = save_if_interesting(argv, out_buf, len, fault);
 
-  queued_discovered += save_if_interesting(argv, out_buf, len, fault);
+  int i;
+  for (i = 0; i < 16; i++) {
+    sidd_total_arr[i] = 0;
+  }
+
+  queued_discovered += sidd_keep;
 
   if (!(stage_cur % stats_update_freq) || stage_cur + 1 == stage_max)
     show_stats();
