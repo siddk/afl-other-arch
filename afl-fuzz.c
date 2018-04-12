@@ -2892,6 +2892,7 @@ static u8* describe_op(u8 hnb) {
   sprintf(ret + strlen(ret), ",sidd:%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d,total:%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d", sidd_count_arr[0], sidd_count_arr[1], sidd_count_arr[2], sidd_count_arr[3], sidd_count_arr[4], sidd_count_arr[5], sidd_count_arr[6], sidd_count_arr[7], sidd_count_arr[8], sidd_count_arr[9], sidd_count_arr[10], sidd_count_arr[11], sidd_count_arr[12], sidd_count_arr[13], sidd_count_arr[14], sidd_count_arr[15], sidd_total_arr[0], sidd_total_arr[1], sidd_total_arr[2], sidd_total_arr[3], sidd_total_arr[4], sidd_total_arr[5], sidd_total_arr[6], sidd_total_arr[7], sidd_total_arr[8], sidd_total_arr[9], sidd_total_arr[10], sidd_total_arr[11], sidd_total_arr[12], sidd_total_arr[13], sidd_total_arr[14], sidd_total_arr[15]);
 
   // Reset SIDD TOTAL ARR after call to describe_op
+  int i;
   for (i = 0; i < 16; i++) {
         sidd_total_arr[i] = 0;
   }
