@@ -105,6 +105,8 @@ int havoc_n_mode = 0;                 /* SIDD: Havoc Num of Stacks        */
 
 static int sidd_count_arr[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; /* SIDD: COUNT ARR: LEN 16 */
 
+static int sidd_total_arr[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; /* SIDD: TOTAL ARR: LEN 16 */
+
 static u8 *havoc_prob_dist;           /* SIDD: String Pointer for P Dist  */
 
 static s32 prob_dist_arr[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; /* SIDD: P DIST */
@@ -2886,8 +2888,13 @@ static u8* describe_op(u8 hnb) {
 
   if (hnb == 2) strcat(ret, ",+cov");
 
-  // SIDD CHANGE : 2/26
-  sprintf(ret + strlen(ret), ",sidd:%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d", sidd_count_arr[0], sidd_count_arr[1], sidd_count_arr[2], sidd_count_arr[3], sidd_count_arr[4], sidd_count_arr[5], sidd_count_arr[6], sidd_count_arr[7], sidd_count_arr[8], sidd_count_arr[9], sidd_count_arr[10], sidd_count_arr[11], sidd_count_arr[12], sidd_count_arr[13], sidd_count_arr[14], sidd_count_arr[15]);
+  // SIDD CHANGE : 2/26, 4/11
+  sprintf(ret + strlen(ret), ",sidd:%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d,total:%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d", sidd_count_arr[0], sidd_count_arr[1], sidd_count_arr[2], sidd_count_arr[3], sidd_count_arr[4], sidd_count_arr[5], sidd_count_arr[6], sidd_count_arr[7], sidd_count_arr[8], sidd_count_arr[9], sidd_count_arr[10], sidd_count_arr[11], sidd_count_arr[12], sidd_count_arr[13], sidd_count_arr[14], sidd_count_arr[15], sidd_total_arr[0], sidd_total_arr[1], sidd_total_arr[2], sidd_total_arr[3], sidd_total_arr[4], sidd_total_arr[5], sidd_total_arr[6], sidd_total_arr[7], sidd_total_arr[8], sidd_total_arr[9], sidd_total_arr[10], sidd_total_arr[11], sidd_total_arr[12], sidd_total_arr[13], sidd_total_arr[14], sidd_total_arr[15]);
+
+  // Reset SIDD TOTAL ARR after call to describe_op
+  for (i = 0; i < 16; i++) {
+        sidd_total_arr[i] = 0;
+  }
 
   return ret;
 
@@ -6018,6 +6025,7 @@ havoc_stage:
           // SIDD START => Add 1 for Bit flipped
            total_bits_changed += 1;
            sidd_count_arr[0] += 1;
+           sidd_total_arr[0] += 1;
            // SIDD END
           break;
 
@@ -6030,7 +6038,7 @@ havoc_stage:
           // SIDD START => Add 8 bits
            total_bits_changed += 8;
            sidd_count_arr[1] += 1;
-
+           sidd_total_arr[1] += 1;
            // SIDD END
 
           break;
@@ -6056,6 +6064,7 @@ havoc_stage:
           // SIDD START => Add 16 bits
            total_bits_changed += 16;
            sidd_count_arr[2] += 1;
+           sidd_total_arr[2] += 1;
            // SIDD END
 
           break;
@@ -6081,6 +6090,7 @@ havoc_stage:
           // SIDD START => Add 32 bits
            total_bits_changed += 32;
            sidd_count_arr[3] += 1;
+           sidd_total_arr[3] += 1;
            // SIDD END
 
           break;
@@ -6094,6 +6104,7 @@ havoc_stage:
           // SIDD START => Add 8 + 3 bits
            total_bits_changed += 11;
            sidd_count_arr[4] += 1;
+           sidd_total_arr[4] += 1;
            // SIDD END
 
           break;
@@ -6107,6 +6118,7 @@ havoc_stage:
           // SIDD START => Add 8 + 3 bits
            total_bits_changed += 11;
            sidd_count_arr[5] += 1;
+           sidd_total_arr[5] += 1;
            // SIDD END
 
           break;
@@ -6136,6 +6148,7 @@ havoc_stage:
           // SIDD START => Add 16 + 5 bits
            total_bits_changed += 21;
            sidd_count_arr[6] += 1;
+           sidd_total_arr[6] += 1;
            // SIDD END
 
           break;
@@ -6165,6 +6178,7 @@ havoc_stage:
           // SIDD START => Add 16 + 5 bits
            total_bits_changed += 21;
            sidd_count_arr[7] += 1;
+           sidd_total_arr[7] += 1;
            // SIDD END
 
           break;
@@ -6194,6 +6208,7 @@ havoc_stage:
           // SIDD START => Add 32 + 9 bits
            total_bits_changed += 41;
            sidd_count_arr[8] += 1;
+           sidd_total_arr[8] += 1;
            // SIDD END
 
           break;
@@ -6223,6 +6238,7 @@ havoc_stage:
           // SIDD START => Add 32 + 9 bits
            total_bits_changed += 41;
            sidd_count_arr[9] += 1;
+           sidd_total_arr[9] += 1;
            // SIDD END
 
           break;
@@ -6238,6 +6254,7 @@ havoc_stage:
           // SIDD START => Add 8 bits
            total_bits_changed += 8;
            sidd_count_arr[10] += 1;
+           sidd_total_arr[10] += 1;
            // SIDD END
 
           break;
@@ -6266,6 +6283,7 @@ havoc_stage:
             // SIDD START => Add 8 * del_len bits
              total_bits_changed += 8 * del_len;
              sidd_count_arr[11] += 1;
+             sidd_total_arr[11] += 1;
              // SIDD END
 
             break;
@@ -6310,6 +6328,7 @@ havoc_stage:
             // SIDD START => Add 8 * clone_len bits
              total_bits_changed += 8 * clone_len;
              sidd_count_arr[12] += 1;
+             sidd_total_arr[12] += 1;
              // SIDD END
 
           }
@@ -6340,6 +6359,7 @@ havoc_stage:
             // SIDD START => Add copy_len bits
              total_bits_changed += 8 * copy_len;
              sidd_count_arr[13] += 1;
+             sidd_total_arr[13] += 1;
              // SIDD END
 
             break;
@@ -6370,6 +6390,7 @@ havoc_stage:
               // SIDD START => Add 8 * extra_len
                total_bits_changed += 8 * extra_len;
                sidd_count_arr[14] += 1;
+               sidd_total_arr[14] += 1;
                // SIDD END
 
             } else {
@@ -6388,6 +6409,7 @@ havoc_stage:
               // SIDD START => Add 8 * extra_len
                total_bits_changed += 8 * extra_len;
                sidd_count_arr[14] += 1;
+               sidd_total_arr[14] += 1;
                // SIDD END
 
             }
@@ -6422,6 +6444,7 @@ havoc_stage:
               // SIDD START => Add 8 * extra_len
                total_bits_changed += 8 * extra_len;
                sidd_count_arr[15] += 1;
+               sidd_total_arr[15] += 1;
                // SIDD END
 
             } else {
@@ -6442,6 +6465,7 @@ havoc_stage:
               // SIDD START => Add 8 * extra_len
                total_bits_changed += 8 * extra_len;
                sidd_count_arr[15] += 1;
+               sidd_total_arr[15] += 1;
                // SIDD END
 
             }
