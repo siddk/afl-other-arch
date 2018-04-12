@@ -4366,9 +4366,12 @@ static u8 common_fuzz_stuff(char** argv, u8* out_buf, u32 len) {
   /* This handles FAULT_ERROR for us: */
   u8 sidd_keep = save_if_interesting(argv, out_buf, len, fault);
 
-  int i;
-  for (i = 0; i < 16; i++) {
-    sidd_total_arr[i] = 0;
+  /* Reset Total Count Arr if Keeping Test Case */
+  if (sidd_keep == 1) {
+      int i;
+      for (i = 0; i < 16; i++) {
+        sidd_total_arr[i] = 0;
+      }
   }
 
   queued_discovered += sidd_keep;
@@ -4377,7 +4380,6 @@ static u8 common_fuzz_stuff(char** argv, u8* out_buf, u32 len) {
     show_stats();
 
   return 0;
-
 }
 
 
