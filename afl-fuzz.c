@@ -6067,6 +6067,8 @@ havoc_stage:
     current_log_entry->mutation_sequence = "";
     current_log_entry->num_edges = 0;
     do_log_write = 1;
+    u8* mutation_str;
+    u8* new_str;
 
     // ZERO OUT SIDD_COUNT_ARR
     for (i = 0; i < 16; i++) {
@@ -6092,8 +6094,8 @@ havoc_stage:
            // SIDD END
 
           // SIDD START => Add to curr_log_entry
-          u8* mutation_str = "0_";
-          u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+          mutation_str = "0_";
+          new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
           strcpy(new_str, current_log_entry->mutation_sequence);
           strcpy(new_str, mutation_str);
           // SIDD END
@@ -6113,8 +6115,8 @@ havoc_stage:
            // SIDD END
 
            // SIDD START => Add to curr_log_entry
-          u8* mutation_str = "1_";
-          u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+          mutation_str = "1_";
+          new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
           strcpy(new_str, current_log_entry->mutation_sequence);
           strcpy(new_str, mutation_str);
           // SIDD END
@@ -6146,8 +6148,8 @@ havoc_stage:
            // SIDD END
 
            // SIDD START => Add to curr_log_entry
-          u8* mutation_str = "2_";
-          u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+          mutation_str = "2_";
+          new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
           strcpy(new_str, current_log_entry->mutation_sequence);
           strcpy(new_str, mutation_str);
           // SIDD END
@@ -6179,8 +6181,8 @@ havoc_stage:
            // SIDD END
 
            // SIDD START => Add to curr_log_entry
-          u8* mutation_str = "3_";
-          u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+          mutation_str = "3_";
+          new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
           strcpy(new_str, current_log_entry->mutation_sequence);
           strcpy(new_str, mutation_str);
           // SIDD END
@@ -6200,8 +6202,8 @@ havoc_stage:
            // SIDD END
 
           // SIDD START => Add to curr_log_entry
-          u8* mutation_str = "4_";
-          u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+          mutation_str = "4_";
+          new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
           strcpy(new_str, current_log_entry->mutation_sequence);
           strcpy(new_str, mutation_str);
           // SIDD END
@@ -6221,8 +6223,8 @@ havoc_stage:
            // SIDD END
 
           // SIDD START => Add to curr_log_entry
-          u8* mutation_str = "5_";
-          u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+          mutation_str = "5_";
+          new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
           strcpy(new_str, current_log_entry->mutation_sequence);
           strcpy(new_str, mutation_str);
           // SIDD END
@@ -6258,8 +6260,8 @@ havoc_stage:
            // SIDD END
 
           // SIDD START => Add to curr_log_entry
-          u8* mutation_str = "6_";
-          u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+          mutation_str = "6_";
+          new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
           strcpy(new_str, current_log_entry->mutation_sequence);
           strcpy(new_str, mutation_str);
           // SIDD END
@@ -6295,8 +6297,8 @@ havoc_stage:
            // SIDD END
 
           // SIDD START => Add to curr_log_entry
-          u8* mutation_str = "7_";
-          u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+          mutation_str = "7_";
+          new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
           strcpy(new_str, current_log_entry->mutation_sequence);
           strcpy(new_str, mutation_str);
           // SIDD END
@@ -6333,8 +6335,8 @@ havoc_stage:
 
 
           // SIDD START => Add to curr_log_entry
-          u8* mutation_str = "8_";
-          u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+          mutation_str = "8_";
+          new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
           strcpy(new_str, current_log_entry->mutation_sequence);
           strcpy(new_str, mutation_str);
           // SIDD END
@@ -6370,8 +6372,8 @@ havoc_stage:
            // SIDD END
 
           // SIDD START => Add to curr_log_entry
-          u8* mutation_str = "9_";
-          u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+          mutation_str = "9_";
+          new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
           strcpy(new_str, current_log_entry->mutation_sequence);
           strcpy(new_str, mutation_str);
           // SIDD END
@@ -6393,8 +6395,8 @@ havoc_stage:
            // SIDD END
 
           // SIDD START => Add to curr_log_entry
-          u8* mutation_str = "10_";
-          u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+          mutation_str = "10_";
+          new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
           strcpy(new_str, current_log_entry->mutation_sequence);
           strcpy(new_str, mutation_str);
           // SIDD END
@@ -6429,8 +6431,8 @@ havoc_stage:
              // SIDD END
 
             // SIDD START => Add to curr_log_entry
-              u8* mutation_str = "11_";
-              u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+              mutation_str = "11_";
+              new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
               strcpy(new_str, current_log_entry->mutation_sequence);
               strcpy(new_str, mutation_str);
               // SIDD END
@@ -6481,8 +6483,8 @@ havoc_stage:
              // SIDD END
 
             // SIDD START => Add to curr_log_entry
-              u8* mutation_str = "12_";
-              u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+              mutation_str = "12_";
+              new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
               strcpy(new_str, current_log_entry->mutation_sequence);
               strcpy(new_str, mutation_str);
               // SIDD END
@@ -6519,8 +6521,8 @@ havoc_stage:
              // SIDD END
 
            // SIDD START => Add to curr_log_entry
-              u8* mutation_str = "13_";
-              u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+              mutation_str = "13_";
+              new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
               strcpy(new_str, current_log_entry->mutation_sequence);
               strcpy(new_str, mutation_str);
               // SIDD END
@@ -6577,8 +6579,8 @@ havoc_stage:
             }
 
             // SIDD START => Add to curr_log_entry
-              u8* mutation_str = "14_";
-              u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+              mutation_str = "14_";
+              new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
               strcpy(new_str, current_log_entry->mutation_sequence);
               strcpy(new_str, mutation_str);
               // SIDD END
@@ -6648,8 +6650,8 @@ havoc_stage:
             temp_len += extra_len;
 
             // SIDD START => Add to curr_log_entry
-              u8* mutation_str = "15_";
-              u8* new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
+              mutation_str = "15_";
+              new_str = (char *) malloc(1 + strlen(current_log_entry->mutation_sequence) + strlen(mutation_str));
               strcpy(new_str, current_log_entry->mutation_sequence);
               strcpy(new_str, mutation_str);
               // SIDD END
