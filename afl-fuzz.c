@@ -389,17 +389,17 @@ static void write_current_log() {
 
     fp = fopen(alloc_printf("%s/MUTATION_LOG", out_dir), "a");
     for (i = 0; i < 300; i++) {
-        fprintf(fp, (log_entries[i]).mutation_sequence);
+        fprintf(fp, "%s", (log_entries[i]).mutation_sequence);
         fprintf(fp, ", ");
 
         char nstackmut[11];
         snprintf(nstackmut, sizeof nstackmut, "%lu", (unsigned long)(log_entries[i]).num_stacked_mutations);
-        fprintf(fp, nstackmut);
+        fprintf(fp, "%s", nstackmut);
         fprintf(fp, ", ");
 
         char nedges[11];
         snprintf(nedges, sizeof nedges, "%lu", (unsigned long)(log_entries[i]).num_edges);
-        fprintf(fp, nedges);
+        fprintf(fp, "%s", nedges);
         fprintf(fp, "\n");
     }
     fclose(fp);
