@@ -209,7 +209,7 @@ struct path_log_entry {
     u32 num_stacked_mutations;       /* Number of stacked mutations executed    */
     u8* mutation_sequence;           /* Sequence of mutation operators executed */
     u32 num_edges;                   /* Number of edges traversed by input      */
-}
+};
 
 typedef struct path_log_entry path_log_entry;
 
