@@ -2329,7 +2329,6 @@ static u8 run_target(char** argv) {
 
     if (current_log_idx == 300) {
         write_current_log();
-        log_entries = blank_entries;
         current_log_idx = 0;
     }
   }
